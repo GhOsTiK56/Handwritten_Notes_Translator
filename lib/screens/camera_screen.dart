@@ -54,6 +54,7 @@ class _CameraScreenState extends State<CameraScreen> {
   Future<String> _takePicture() async {
     if (!_controller!.value.isInitialized || _controller!.value.isTakingPicture) {
       throw Exception('Камера не готова');
+      //camera
     }
     await _controller!.setFlashMode(FlashMode.off);
     final XFile photo = await _controller!.takePicture();
