@@ -16,8 +16,13 @@ dependencies:
     sdk: flutter
   camera: ^0.10.0
   path_provider: ^2.0.0
-  image: ^4.2.0
+  image: ^4.5.4
   http: ^1.2.0
+  image_picker: ^1.1.2     # Для выбора из галереи
+  pdf: ^3.11.0            # Для создания PDF
+  flutter_launcher_icons: ^0.13.1  # Для иконки (опционально)
+  permission_handler: ^11.3.1
+  open_file: ^3.3.2
 
 
   cupertino_icons: ^1.0.8
@@ -31,6 +36,8 @@ dev_dependencies:
 
 
 flutter:
+  assets:
+    - assets/fonts/Roboto-VariableFont_wdth,wght.ttf
 
 
   uses-material-design: true

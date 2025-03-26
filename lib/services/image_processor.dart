@@ -14,12 +14,14 @@ class ImageProcessor {
       return null;
     }
 
+    // Преобразуем в чёрно-белое и сильно увеличиваем контраст
     final grayscaleImage = img.grayscale(originalImage);
-    final processedImage = img.adjustColor(grayscaleImage, contrast: 2.0);
+    final contrastedImage = img.adjustColor(grayscaleImage, contrast: 4.0); // Увеличили контраст до 4.0
 
+    // Без бинаризации, чтобы сохранить детали текста
     final tempDir = await getTemporaryDirectory();
     final processedPath = path.join(tempDir.path, 'processed_${DateTime.now().millisecondsSinceEpoch}.jpg');
-    await File(processedPath).writeAsBytes(img.encodeJpg(processedImage));
+    await File(processedPath).writeAsBytes(img.encodeJpg(contrastedImage));
 
     print('Image processed: $processedPath');
     return File(processedPath);

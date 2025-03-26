@@ -1,9 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:flutter/services.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 import 'processing_screen.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -18,7 +15,6 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   CameraController? _controller;
   bool _isCameraReady = false;
-  static const platform = MethodChannel('com.example.handwritten_notes_translator/gallery');
 
   @override
   void initState() {
@@ -47,35 +43,17 @@ class _CameraScreenState extends State<CameraScreen> {
 
   @override
   void dispose() {
-    _controller?.setFlashMode(FlashMode.off);
     _controller?.dispose();
     super.dispose();
   }
 
-  Future<String> _takePicture() async {
-    if (!_controller!.value.isInitialized || _controller!.value.isTakingPicture) {
-      throw Exception('Камера не готова');
-    }
-    await _controller!.setFlashMode(FlashMode.off);
+  Future<void> _takePicture() async {
+    if (!_controller!.value.isInitialized || _controller!.value.isTakingPicture) return;
     final XFile photo = await _controller!.takePicture();
-
-    final tempDir = await getTemporaryDirectory();
-    final tempPath = path.join(tempDir.path, 'photo_${DateTime.now().millisecondsSinceEpoch}.jpg');
-    await photo.saveTo(tempPath);
-
-    final fileName = 'photo_${DateTime.now().millisecondsSinceEpoch}.jpg';
-    try {
-      final String? galleryPath = await platform.invokeMethod('saveToGallery', {
-        'path': tempPath,
-        'fileName': fileName,
-      });
-      if (galleryPath == null) throw Exception('Не удалось сохранить в галерею');
-
-      await File(tempPath).delete();
-      return galleryPath;
-    } catch (e) {
-      throw Exception('Ошибка сохранения: $e');
-    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => ProcessingScreen(imagePath: photo.path)),
+    );
   }
 
   @override
@@ -84,28 +62,20 @@ class _CameraScreenState extends State<CameraScreen> {
       return Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     return Scaffold(
-      appBar: AppBar(title: Text('Сфотографируйте заметку')),
-      body: CameraPreview(_controller!),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          try {
-            final imagePath = await _takePicture();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Фото сохранено в галерее: $imagePath')),
-            );
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ProcessingScreen(imagePath: imagePath),
+      body: Stack(
+        children: [
+          CameraPreview(_controller!),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: FloatingActionButton(
+                onPressed: _takePicture,
+                child: Icon(Icons.camera),
               ),
-            );
-          } catch (e) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Ошибка съемки: $e')),
-            );
-          }
-        },
-        child: Icon(Icons.camera),
+            ),
+          ),
+        ],
       ),
     );
   }

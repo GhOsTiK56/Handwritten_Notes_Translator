@@ -7,8 +7,8 @@ class YandexOcrService {
     print('Starting Yandex text recognition...');
     print('Processed image path: ${image.path}');
 
-    const authToken = 'YOAR_API_KEY'; // Ваш IAM-токен или API-ключ
-    const folderId = 'YOUR_ID_CATALOG';
+    const authToken = 'API'; // Ваш IAM-токен или API-ключ
+    const folderId = 'FOLDER';
     const url = 'https://ocr.api.cloud.yandex.net/ocr/v1/recognizeText';
 
     final imageBytes = await image.readAsBytes();
@@ -17,8 +17,8 @@ class YandexOcrService {
 
     final requestBody = jsonEncode({
       'mimeType': 'JPEG',
-      'languageCodes': ['*'],
-      'model': 'handwritten',
+      'languageCodes': ['ru', 'en'], // Явно указываем языки для handwritten
+      'model': 'handwritten', // Модель для рукописного текста
       'content': base64Image,
     });
     print('Request body: $requestBody');
