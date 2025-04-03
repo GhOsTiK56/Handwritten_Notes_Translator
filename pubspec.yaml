@@ -23,6 +23,8 @@ dependencies:
   flutter_launcher_icons: ^0.13.1  # Для иконки (опционально)
   permission_handler: ^11.3.1
   open_file: ^3.3.2
+  speech_to_text: ^6.6.2  # Для голосового ввода
+  flutter_pdfview: ^1.3.2 # Для предпросмотра PDF
 
 
   cupertino_icons: ^1.0.8
@@ -31,13 +33,20 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/app_icon.png"
+
 
   flutter_lints: ^5.0.0
 
 
 flutter:
   assets:
-    - assets/fonts/Roboto-VariableFont_wdth,wght.ttf
+    - assets/fonts/Roboto-Regular.ttf
+    - assets/icons/app_icon.png
+    - assets/fonts/Caveat-Regular.ttf
 
 
   uses-material-design: true

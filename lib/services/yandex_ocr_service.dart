@@ -8,7 +8,7 @@ class YandexOcrService {
     print('Processed image path: ${image.path}');
 
     const authToken = 'API'; // Ваш IAM-токен или API-ключ
-    const folderId = 'FOLDER';
+    const folderId = 'Folder';
     const url = 'https://ocr.api.cloud.yandex.net/ocr/v1/recognizeText';
 
     final imageBytes = await image.readAsBytes();
