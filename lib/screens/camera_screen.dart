@@ -22,6 +22,9 @@ class _CameraScreenState extends State<CameraScreen> {
     _initializeCamera();
   }
 
+
+
+
   Future<void> _initializeCamera() async {
     try {
       if (widget.cameras.isEmpty) throw Exception('Камеры не найдены');
